@@ -86,23 +86,37 @@ async function extractWithHaiku(prompt, pageText, apiKey) {
 
 exports.handler = async (event) => {
   if (event.headers['x-refresh-token'] !== process.env.REFRESH_TOKEN) {
+    console.log('Auth failed — bad token');
     return { statusCode: 401 };
   }
+  console.log('Auth passed');
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) {
     console.error('ANTHROPIC_API_KEY not set');
     return { statusCode: 500 };
   }
+  console.log('API key present, starting fetches');
 
-  const store = getStore('dashboard');
+  let store;
+  try {
+    store = getStore('dashboard');
+    console.log('Blobs store initialised');
+  } catch (err) {
+    console.error('Blobs init failed:', err.message);
+    return { statusCode: 500 };
+  }
+
   const settings = (await store.get('settings', { type: 'json' }).catch(() => null)) || {};
 
   const results = await Promise.allSettled(
     METRICS.map(async (metric) => {
       const url = settings[metric.key] || metric.defaultUrl;
+      console.log(`[${metric.key}] fetching ${url}`);
       const pageText = await jinaFetch(url);
+      console.log(`[${metric.key}] Jina OK, ${pageText.length} chars`);
       const extracted = await extractWithHaiku(metric.prompt, pageText, apiKey);
+      console.log(`[${metric.key}] Haiku returned: "${extracted}"`);
       const raw = parseFloat(extracted.replace(/[,%$\s]/g, ''));
       if (isNaN(raw) || !metric.validate(raw)) {
         throw new Error(`Validation failed: "${extracted}" → ${raw}`);
@@ -119,17 +133,23 @@ exports.handler = async (event) => {
   results.forEach((result, i) => {
     const key = METRICS[i].key;
     if (result.status === 'fulfilled') {
+      console.log(`[${key}] success: ${result.value.value}`);
       snapshot.data[key] = result.value;
     } else {
-      console.error(`[${key}]`, result.reason.message);
+      console.error(`[${key}] failed: ${result.reason.message}`);
       snapshot.data[key] = { key, value: null, raw: null, error: result.reason.message };
     }
   });
 
   // Preserve previous snapshot for rollback
-  const prev = await store.get('snapshot').catch(() => null);
-  if (prev) await store.set('snapshot-previous', prev).catch(() => null);
-  await store.set('snapshot', JSON.stringify(snapshot));
+  try {
+    const prev = await store.get('snapshot').catch(() => null);
+    if (prev) await store.set('snapshot-previous', prev).catch(() => null);
+    await store.set('snapshot', JSON.stringify(snapshot));
+    console.log('Snapshot written to Blobs OK');
+  } catch (err) {
+    console.error('Blobs write failed:', err.message);
+  }
 
   return { statusCode: 200 };
 };
