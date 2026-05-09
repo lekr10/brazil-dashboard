@@ -1,0 +1,1302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brazil · Macro Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:        #F2F3F7;
+      --surface:   #FFFFFF;
+      --border:    #E4E7EF;
+      --text-1:    #0F1117;
+      --text-2:    #6B7280;
+      --text-3:    #B0B7C3;
+      --green:     #16A34A;
+      --green-bg:  #F0FDF4;
+      --amber:     #D97706;
+      --amber-bg:  #FFFBEB;
+      --red:       #DC2626;
+      --red-bg:    #FEF2F2;
+      --accent:    #FFDF00;
+      --radius:    10px;
+      --shadow:    0 1px 3px rgba(0,0,0,0.07), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text-1);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ─── Header ─── */
+    .header {
+      background: #0F1117;
+      padding: 0 32px;
+      height: 58px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    /* Brazil flag stripe across top */
+    .header::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #009C3B 33%, #FFDF00 33% 66%, #002776 66%);
+    }
+
+    .header-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .header-flag {
+      font-size: 20px;
+      line-height: 1;
+    }
+
+    .header-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -0.01em;
+    }
+
+    .header-divider {
+      width: 1px;
+      height: 16px;
+      background: rgba(255,255,255,0.12);
+    }
+
+    .header-sub {
+      font-size: 12px;
+      color: rgba(255,255,255,0.35);
+      font-weight: 400;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .last-updated {
+      font-size: 11px;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .btn-refresh {
+      background: var(--accent);
+      color: #0F1117;
+      border: none;
+      height: 32px;
+      padding: 0 14px;
+      border-radius: 6px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      letter-spacing: 0.01em;
+      transition: opacity 0.15s, transform 0.1s;
+    }
+    .btn-refresh:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-refresh:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
+
+    .btn-gear {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.5);
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-gear:hover {
+      background: rgba(255,255,255,0.1);
+      color: rgba(255,255,255,0.8);
+    }
+
+    /* ─── Page layout ─── */
+    .page {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 28px 24px 64px;
+    }
+
+    /* ─── Thesis bar ─── */
+    .thesis {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px 28px;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      box-shadow: var(--shadow);
+    }
+
+    .thesis-score-block { flex-shrink: 0; }
+
+    .thesis-eyebrow {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: var(--text-3);
+      margin-bottom: 6px;
+    }
+
+    .thesis-verdict {
+      font-size: 22px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+    }
+
+    .thesis-dots {
+      display: flex;
+      gap: 4px;
+      margin-top: 8px;
+    }
+
+    .thesis-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+    }
+
+    .thesis-divider {
+      width: 1px;
+      height: 40px;
+      background: var(--border);
+      flex-shrink: 0;
+    }
+
+    .thesis-detail {
+      font-size: 12px;
+      color: var(--text-2);
+      line-height: 1.6;
+    }
+
+    /* ─── Election card ─── */
+    .election-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--amber);
+      border-radius: var(--radius);
+      padding: 24px 28px;
+      margin-bottom: 20px;
+      box-shadow: var(--shadow);
+    }
+
+    .election-top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .election-eyebrow {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.4px;
+      color: var(--text-3);
+      margin-bottom: 3px;
+    }
+
+    .election-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .gating-tag {
+      background: var(--amber-bg);
+      color: var(--amber);
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      padding: 4px 9px;
+      border-radius: 4px;
+      white-space: nowrap;
+    }
+
+    .election-body {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+
+    .col-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.2px;
+      color: var(--text-3);
+      margin-bottom: 14px;
+    }
+
+    /* Poll bars */
+    .poll-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .poll-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-1);
+      width: 160px;
+      flex-shrink: 0;
+    }
+    .poll-track {
+      flex: 1;
+      height: 8px;
+      background: var(--bg);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .poll-fill {
+      height: 100%;
+      border-radius: 100px;
+    }
+    .poll-pct {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-1);
+      width: 32px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .poll-note {
+      font-size: 11px;
+      color: var(--text-3);
+      margin-top: 14px;
+      line-height: 1.5;
+    }
+
+    /* Approval */
+    .approval-divider { border-left: 1px solid var(--border); padding-left: 32px; }
+
+    .approval-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .approval-label {
+      font-size: 11px;
+      color: var(--text-2);
+      width: 64px;
+      flex-shrink: 0;
+    }
+    .approval-track {
+      flex: 1;
+      height: 6px;
+      background: var(--bg);
+      border-radius: 100px;
+      overflow: hidden;
+    }
+    .approval-fill { height: 100%; border-radius: 100px; }
+    .approval-pct {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-2);
+      width: 28px;
+      text-align: right;
+      flex-shrink: 0;
+    }
+
+    .approval-sources {
+      font-size: 10px;
+      color: var(--text-3);
+      margin-top: 14px;
+      line-height: 1.6;
+    }
+
+    .election-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 20px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    .status-line {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-2);
+    }
+
+    .status-pip {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .pip-green  { background: var(--green); }
+    .pip-amber  { background: var(--amber); }
+    .pip-red    { background: var(--red);   }
+
+    .footer-source {
+      font-size: 10px;
+      color: var(--text-3);
+    }
+
+    /* ─── Section label ─── */
+    .section {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-3);
+      margin-bottom: 10px;
+      margin-top: 4px;
+    }
+
+    /* ─── Metric grid ─── */
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    @media (max-width: 1000px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 600px) {
+      .grid-4, .grid-3 { grid-template-columns: 1fr; }
+      .election-body { grid-template-columns: 1fr; }
+      .approval-divider { border-left: none; padding-left: 0; border-top: 1px solid var(--border); padding-top: 20px; }
+    }
+
+    /* ─── Metric card ─── */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px 20px 14px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow 0.15s, transform 0.12s;
+      position: relative;
+      overflow: hidden;
+    }
+    .card:hover {
+      box-shadow: 0 4px 16px rgba(0,0,0,0.09);
+      transform: translateY(-1px);
+    }
+
+    /* Top status stripe */
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 3px;
+    }
+    .card.green::before  { background: var(--green); }
+    .card.amber::before  { background: var(--amber); }
+    .card.red::before    { background: var(--red);   }
+
+    .card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .card-label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--text-1);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .card-pip {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .card-link {
+      color: var(--text-3);
+      text-decoration: none;
+      font-size: 14px;
+      line-height: 1;
+      transition: color 0.12s;
+    }
+    .card-link:hover { color: var(--text-2); }
+
+    .card-value {
+      font-size: 36px;
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      color: var(--text-1);
+      line-height: 1;
+      margin-bottom: 5px;
+    }
+
+    .card-trend {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-2);
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .arrow {
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+    }
+    .arr-good-up    { color: var(--green); }
+    .arr-good-down  { color: var(--green); }
+    .arr-bad-up     { color: var(--red);   }
+    .arr-bad-down   { color: var(--red);   }
+    .arr-neutral    { color: var(--text-3); }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 12px;
+      margin-top: auto;
+      border-top: 1px solid var(--border);
+    }
+
+    .card-source {
+      font-size: 9px;
+      color: var(--text-3);
+      font-weight: 500;
+    }
+
+    .card-date {
+      font-size: 9px;
+      color: var(--text-3);
+    }
+
+    /* ─── Settings panel ─── */
+    .overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15,17,23,0.5);
+      z-index: 90;
+      backdrop-filter: blur(2px);
+    }
+    .overlay.open { display: block; }
+
+    .panel {
+      position: fixed;
+      top: 0; right: -480px;
+      width: 480px;
+      height: 100vh;
+      background: var(--surface);
+      z-index: 91;
+      transition: right 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--border);
+    }
+    .panel.open { right: 0; }
+
+    .panel-head {
+      padding: 20px 24px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      flex-shrink: 0;
+    }
+
+    .panel-title {
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 3px;
+    }
+
+    .panel-sub {
+      font-size: 11px;
+      color: var(--text-2);
+      line-height: 1.5;
+    }
+
+    .btn-close {
+      background: none;
+      border: none;
+      color: var(--text-3);
+      font-size: 18px;
+      cursor: pointer;
+      padding: 2px;
+      line-height: 1;
+      margin-top: -2px;
+    }
+    .btn-close:hover { color: var(--text-1); }
+
+    .panel-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 0 24px;
+    }
+
+    .panel-section-label {
+      font-size: 9px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1.3px;
+      color: var(--text-3);
+      padding: 16px 0 8px;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0;
+    }
+
+    .panel-row {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .panel-row:last-child { border-bottom: none; }
+
+    .panel-row-name {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-1);
+      margin-bottom: 2px;
+    }
+    .panel-row-hint {
+      font-size: 10px;
+      color: var(--text-3);
+      margin-bottom: 8px;
+    }
+
+    .url-input {
+      width: 100%;
+      padding: 8px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+      font-size: 10px;
+      color: var(--text-1);
+      background: var(--bg);
+      transition: border-color 0.15s, background 0.15s;
+    }
+    .url-input:focus {
+      outline: none;
+      border-color: #0F1117;
+      background: #fff;
+    }
+
+    .panel-foot {
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .btn-save {
+      width: 100%;
+      padding: 11px;
+      background: #0F1117;
+      color: #fff;
+      border: none;
+      border-radius: 7px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: -0.01em;
+      transition: opacity 0.15s;
+    }
+    .btn-save:hover { opacity: 0.85; }
+
+    /* ─── Toast ─── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%) translateY(8px);
+      background: #0F1117;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 500;
+      padding: 9px 18px;
+      border-radius: 7px;
+      opacity: 0;
+      transition: opacity 0.2s, transform 0.2s;
+      pointer-events: none;
+      z-index: 200;
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    /* ─── Spinner ─── */
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .spin { display: inline-block; animation: spin 0.7s linear infinite; }
+  </style>
+</head>
+<body>
+
+<!-- ── Header ── -->
+<header class="header">
+  <div class="header-left">
+    <span class="header-flag">🇧🇷</span>
+    <span class="header-title">Brazil Macro Dashboard</span>
+    <span class="header-divider"></span>
+    <span class="header-sub">B3 · EWZ position monitor</span>
+  </div>
+  <div class="header-right">
+    <span class="last-updated">Updated <span id="lastUpdated">—</span></span>
+    <button class="btn-refresh" id="refreshBtn" onclick="handleRefresh()">
+      <span id="refreshIcon">↻</span> Refresh
+    </button>
+    <button class="btn-gear" onclick="openSettings()" title="Configure sources">⚙</button>
+  </div>
+</header>
+
+<!-- ── Page ── -->
+<div class="page">
+
+  <!-- Thesis health -->
+  <div class="thesis">
+    <div class="thesis-score-block">
+      <div class="thesis-eyebrow">Thesis Health</div>
+      <div class="thesis-verdict" id="verdictText">—</div>
+      <div class="thesis-dots" id="thesisDots"></div>
+    </div>
+    <div class="thesis-divider"></div>
+    <div class="thesis-detail">
+      Rate cut cycle intact and inflation cooperating. BRL strengthening through 5.0 and EWZ inflows at 2019 highs signal foreign conviction building. Gross debt trajectory and the 2026 election are the primary overhangs — the election outcome is the single variable that determines Spring vs. Fall scenario.
+    </div>
+  </div>
+
+  <!-- Election card -->
+  <div class="election-card">
+    <div class="election-top">
+      <div>
+        <div class="election-eyebrow">Political Landscape · 2026 Presidential Election</div>
+        <div class="election-title">Election Polling &amp; Presidential Approval</div>
+      </div>
+      <span class="gating-tag">⚠ Thesis Gating Variable</span>
+    </div>
+
+    <div class="election-body">
+      <!-- Poll bars -->
+      <div>
+        <div class="col-label">Presidential race · first round</div>
+
+        <div class="poll-row">
+          <div class="poll-name">Flávio Bolsonaro (R)</div>
+          <div class="poll-track">
+            <div class="poll-fill" style="width:42%; background:#2563EB;"></div>
+          </div>
+          <div class="poll-pct">42%</div>
+        </div>
+
+        <div class="poll-row">
+          <div class="poll-name">Lula (L, incumbent)</div>
+          <div class="poll-track">
+            <div class="poll-fill" style="width:38%; background:#DC2626;"></div>
+          </div>
+          <div class="poll-pct">38%</div>
+        </div>
+
+        <div class="poll-row">
+          <div class="poll-name">Other / Undecided</div>
+          <div class="poll-track">
+            <div class="poll-fill" style="width:20%; background:#D1D5DB;"></div>
+          </div>
+          <div class="poll-pct">20%</div>
+        </div>
+
+        <p class="poll-note">
+          Bolsonaro win → fiscal discipline → deeper cuts → bull case unlocked<br>
+          Lula win → loose fiscal stance → crowding-out persists → slower recovery
+        </p>
+      </div>
+
+      <!-- Lula approval -->
+      <div class="approval-divider">
+        <div class="col-label">Lula approval — Datafolha</div>
+
+        <div class="approval-row">
+          <div class="approval-label">Bad / Poor</div>
+          <div class="approval-track">
+            <div class="approval-fill" style="width:40%; background:var(--red);"></div>
+          </div>
+          <div class="approval-pct">40%</div>
+        </div>
+
+        <div class="approval-row">
+          <div class="approval-label">Average</div>
+          <div class="approval-track">
+            <div class="approval-fill" style="width:29%; background:#D1D5DB;"></div>
+          </div>
+          <div class="approval-pct">29%</div>
+        </div>
+
+        <div class="approval-row">
+          <div class="approval-label">Good</div>
+          <div class="approval-track">
+            <div class="approval-fill" style="width:29%; background:var(--green);"></div>
+          </div>
+          <div class="approval-pct">29%</div>
+        </div>
+
+        <div class="approval-sources">
+          Quaest: 52% disapprove · 43% approve<br>
+          Declining approval reduces Lula's re-election odds — market-positive signal.
+        </div>
+      </div>
+    </div>
+
+    <div class="election-footer">
+      <div class="status-line">
+        <span class="status-pip pip-amber"></span>
+        Race tightening — outcome uncertain heading into H2 2026
+      </div>
+      <span class="footer-source">Datafolha · Quaest · May 2, 2026</span>
+    </div>
+  </div>
+
+  <!-- Row 1: monetary + fx/flows -->
+  <div class="section">Monetary Policy &amp; Currency</div>
+  <div class="grid-4">
+
+    <!-- SELIC -->
+    <div class="card amber" id="card-selic">
+      <div class="card-top">
+        <div class="card-label">
+          <span class="card-pip pip-amber" id="pip-selic"></span>
+          SELIC Rate
+        </div>
+        <a class="card-link" href="https://tradingeconomics.com/brazil/interest-rate" target="_blank" title="View source">↗</a>
+      </div>
+      <div class="card-value" id="val-selic">14.50%</div>
+      <div class="card-trend" id="trend-selic">
+        <span class="arrow arr-good-down">↓</span> Cutting · down from 15.0% peak
+      </div>
+      <div class="card-footer">
+        <span class="card-source">Banco Central do Brasil</span>
+        <span class="card-date" id="date-selic">May 7, 2026</span>
+      </div>
+    </div>
+
+    <!-- IPCA -->
+    <div class="card green" id="card-ipca">
+      <div class="card-top">
+        <div class="card-label">
+          <span class="card-pip pip-green" id="pip-ipca"></span>
+          IPCA Inflation YoY
+        </div>
+        <a class="card-link" href="https://tradingeconomics.com/brazil/inflation-cpi" target="_blank" title="View source">↗</a>
+      </div>
+      <div class="card-value" id="val-ipca">4.14%</div>
+      <div class="card-trend" id="trend-ipca">
+        <span class="arrow arr-good-down">↓</span> Trending toward 3% target
+      </div>
+      <div class="card-footer">
+        <span class="card-source">IBGE</span>
+        <span class="card-date" id="date-ipca">Apr 25, 2026</span>
+      </div>
+    </div>
+
+    <!-- USD/BRL -->
+    <div class="card green" id="card-fx">
+      <div class="card-top">
+        <div class="card-label">
+          <span class="card-pip pip-green" id="pip-fx"></span>
+          USD / BRL
+        </div>
+        <a class="card-link" href="https://tradingeconomics.com/usdbrl:cur" target="_blank" title="View source">↗</a>
+      </div>
+      <div class="card-value" id="val-fx">4.95</div>
+      <div class="card-trend" id="trend-fx">
+        <span class="arrow arr-good-down">↓</span> BRL strengthening · sub-5.0
+      </div>
+      <div class="card-footer">
+        <span class="card-source">TradingView</span>
+        <span class="card-date" id="date-fx">May 9, 2026</span>
+      </div>
+    </div>
+
+    <!-- EWZ -->
+    <div class="card green" id="card-ewz">
+      <div class="card-top">
+        <div class="card-label">
+          <span class="card-pip pip-green" id="pip-ewz"></span>
+          EWZ Shares Outstanding
+        </div>
+        <a class="card-link" href="https://www.ishares.com/us/products/239612/" target="_blank" title="View source">↗</a>
+      </div>
+      <div class="card-value" id="val-ewz">291M</div>
+      <div class="card-trend" id="trend-ewz">
+        <span class="arrow arr-good-up">↑</span> +93M since Jan · 2019 highs
+      </div>
+      <div class="card-footer">
+        <span class="card-source">iShares</span>
+        <span class="card-date" id="date-ewz">Apr 30, 2026</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Row 2: markets + fiscal + macro -->
+  <div class="section">Markets, Fiscal &amp; Economy</div>
+  <div class="grid-3">
+
+    <!-- IBOVESPA -->
+    <div class="card green" id="card-ibov">
+      <div class="card-top">
+        <div class="card-label">
+          <span class="card-pip pip-green" id="pip-ibov"></span>
+          IBOVESPA
+        </div>
+        <a class="card-link" href="https://tradingeconomics.com/brazil/stock-market" target="_blank" title="View source">↗</a>
+      </div>
+      <div class="card-value" id="val-ibov">184,090</div>
+      <div class="card-trend" id="trend-ibov">
+        <span class="arrow arr-good-up">↑</span> Trending higher · new highs
+      </div>
+      <div class="card-footer">
+        <span class="card-source">B3 / TradingView</span>
+        <span class="card-date" id="date-ibov">May 9, 2026</span>
+      </div>
+    </div>
+
+    <!-- Gross Debt -->
+    <div class="card red" id="card-debt">
+      <div class="card-top">
+        <div class="card-label">
+          <span class="card-pip pip-red" id="pip-debt"></span>
+          Gross Public Debt / GDP
+        </div>
+        <a class="card-link" href="https://tradingeconomics.com/brazil/government-debt-to-gdp" target="_blank" title="View source">↗</a>
+      </div>
+      <div class="card-value" id="val-debt">79%</div>
+      <div class="card-trend" id="trend-debt">
+        <span class="arrow arr-bad-up">↑</span> Rising · up from 56% a decade ago
+      </div>
+      <div class="card-footer">
+        <span class="card-source">Banco Central do Brasil</span>
+        <span class="card-date" id="date-debt">Apr 30, 2026</span>
+      </div>
+    </div>
+
+    <!-- Unemployment -->
+    <div class="card green" id="card-unemp">
+      <div class="card-top">
+        <div class="card-label">
+          <span class="card-pip pip-green" id="pip-unemp"></span>
+          Unemployment Rate
+        </div>
+        <a class="card-link" href="https://tradingeconomics.com/brazil/unemployment-rate" target="_blank" title="View source">↗</a>
+      </div>
+      <div class="card-value" id="val-unemp">5.6%</div>
+      <div class="card-trend" id="trend-unemp">
+        <span class="arrow arr-neutral">→</span> Stable at multi-year lows
+      </div>
+      <div class="card-footer">
+        <span class="card-source">IBGE – PNAD Contínua</span>
+        <span class="card-date" id="date-unemp">Apr 25, 2026</span>
+      </div>
+    </div>
+
+  </div>
+
+</div><!-- /page -->
+
+<!-- Settings overlay -->
+<div class="overlay" id="overlay" onclick="closeSettings()"></div>
+
+<!-- Settings panel -->
+<div class="panel" id="panel">
+  <div class="panel-head">
+    <div>
+      <div class="panel-title">Data Sources</div>
+      <div class="panel-sub">Set a URL per metric. Refresh reads each page and extracts the current value — swap any URL for a better source and it just works.</div>
+    </div>
+    <button class="btn-close" onclick="closeSettings()">✕</button>
+  </div>
+
+  <div class="panel-body">
+
+    <div class="panel-section-label">Authentication</div>
+
+    <div class="panel-row">
+      <div class="panel-row-name">Refresh Token</div>
+      <div class="panel-row-hint">Set REFRESH_TOKEN in Netlify → Site settings → Environment variables</div>
+      <input class="url-input" type="password" id="input-token" placeholder="Paste your refresh token here">
+    </div>
+
+    <div class="panel-section-label">Source URLs</div>
+
+    <div class="panel-row">
+      <div class="panel-row-name">Election Polling</div>
+      <div class="panel-row-hint">Datafolha or Quaest latest results — updated manually</div>
+      <input class="url-input" type="url" id="url-election" value="https://datafolha.folha.uol.com.br/opiniao-publica/pesquisas-eleitorais">
+    </div>
+    <div class="panel-row">
+      <div class="panel-row-name">Lula Approval Rating</div>
+      <div class="panel-row-hint">Datafolha government approval tracking — updated manually</div>
+      <input class="url-input" type="url" id="url-approval" value="https://datafolha.folha.uol.com.br/opiniao-publica/governo-lula">
+    </div>
+    <div class="panel-row">
+      <div class="panel-row-name">SELIC Rate</div>
+      <div class="panel-row-hint">Any page showing the current BCB rate</div>
+      <input class="url-input" type="url" id="url-selic" value="https://tradingeconomics.com/brazil/interest-rate">
+    </div>
+    <div class="panel-row">
+      <div class="panel-row-name">IPCA Inflation (YoY)</div>
+      <div class="panel-row-hint">IBGE or Trading Economics IPCA page</div>
+      <input class="url-input" type="url" id="url-ipca" value="https://tradingeconomics.com/brazil/inflation-cpi">
+    </div>
+    <div class="panel-row">
+      <div class="panel-row-name">USD / BRL Rate</div>
+      <div class="panel-row-hint">Any live FX quote page</div>
+      <input class="url-input" type="url" id="url-fx" value="https://tradingeconomics.com/usdbrl:cur">
+    </div>
+    <div class="panel-row">
+      <div class="panel-row-name">EWZ Shares Outstanding</div>
+      <div class="panel-row-hint">iShares EWZ product page</div>
+      <input class="url-input" type="url" id="url-ewz" value="https://www.ishares.com/us/products/239612/ishares-msci-brazil-etf">
+    </div>
+    <div class="panel-row">
+      <div class="panel-row-name">IBOVESPA</div>
+      <div class="panel-row-hint">B3 or Trading Economics Brazil equities</div>
+      <input class="url-input" type="url" id="url-ibov" value="https://tradingeconomics.com/brazil/stock-market">
+    </div>
+    <div class="panel-row">
+      <div class="panel-row-name">Gross Public Debt / GDP</div>
+      <div class="panel-row-hint">BCB fiscal stats or Trading Economics</div>
+      <input class="url-input" type="url" id="url-debt" value="https://tradingeconomics.com/brazil/government-debt-to-gdp">
+    </div>
+    <div class="panel-row">
+      <div class="panel-row-name">Unemployment Rate</div>
+      <div class="panel-row-hint">IBGE PNAD Contínua or Trading Economics</div>
+      <input class="url-input" type="url" id="url-unemp" value="https://tradingeconomics.com/brazil/unemployment-rate">
+    </div>
+  </div>
+
+  <div class="panel-foot">
+    <button class="btn-save" onclick="saveSettings()">Save Settings</button>
+  </div>
+</div>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── Threshold & trend config per metric ──────────────────────────
+  const METRIC_CFG = {
+    selic: {
+      status: (r) => r <= 11 ? 'green' : r <= 14.25 ? 'amber' : 'red',
+      trend:  (r) => r < 15
+        ? { dir: '↓', cls: 'arr-good-down', text: 'Cutting · down from 15.0% peak' }
+        : { dir: '→', cls: 'arr-neutral',   text: 'Holding · watching for cuts' },
+    },
+    ipca: {
+      status: (r) => r <= 4.5 ? 'green' : r <= 6 ? 'amber' : 'red',
+      trend:  (r) => r <= 4.5
+        ? { dir: '↓', cls: 'arr-good-down', text: 'Trending toward 3% target' }
+        : { dir: '↑', cls: 'arr-bad-up',   text: 'Above comfort zone' },
+    },
+    fx: {
+      status: (r) => r < 5.0 ? 'green' : r <= 5.5 ? 'amber' : 'red',
+      trend:  (r) => r < 5.0
+        ? { dir: '↓', cls: 'arr-good-down', text: 'BRL strengthening · sub-5.0' }
+        : { dir: '↑', cls: 'arr-bad-up',   text: 'BRL weakening' },
+    },
+    ewz: {
+      status: (r) => r >= 280 ? 'green' : r >= 200 ? 'amber' : 'red',
+      trend:  () => ({ dir: '↑', cls: 'arr-good-up', text: '+93M since Jan · 2019 highs' }),
+    },
+    ibov: {
+      status: (r) => r >= 160000 ? 'green' : r >= 100000 ? 'amber' : 'red',
+      trend:  () => ({ dir: '↑', cls: 'arr-good-up', text: 'Trending higher · new highs' }),
+    },
+    debt: {
+      status: (r) => r < 65 ? 'green' : r <= 75 ? 'amber' : 'red',
+      trend:  () => ({ dir: '↑', cls: 'arr-bad-up', text: 'Rising · up from 56% a decade ago' }),
+    },
+    unemp: {
+      status: (r) => r < 7 ? 'green' : r <= 10 ? 'amber' : 'red',
+      trend:  () => ({ dir: '→', cls: 'arr-neutral', text: 'Stable at multi-year lows' }),
+    },
+  };
+
+  let currentSnapshotTs = null;
+
+  // ── Boot ─────────────────────────────────────────────────────────
+  (async function init() {
+    renderThesis();
+    loadTokenFromStorage();
+    await loadData();
+  })();
+
+  // ── Load data from Netlify ────────────────────────────────────────
+  async function loadData() {
+    try {
+      const resp = await fetch('/.netlify/functions/get-data');
+      if (!resp.ok) return;
+      const { snapshot, settings } = await resp.json();
+      if (settings && Object.keys(settings).length) applySettings(settings);
+      if (snapshot) applySnapshot(snapshot);
+    } catch (e) {
+      // Running locally without Netlify — placeholder values remain
+      console.info('Backend not available:', e.message);
+    }
+  }
+
+  // ── Apply snapshot to UI ──────────────────────────────────────────
+  function applySnapshot(snapshot) {
+    currentSnapshotTs = snapshot.lastUpdated;
+
+    const ts = new Date(snapshot.lastUpdated);
+    document.getElementById('lastUpdated').textContent =
+      ts.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) +
+      ' · ' + ts.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+    for (const [key, cfg] of Object.entries(METRIC_CFG)) {
+      const d = snapshot.data?.[key];
+      if (!d || d.error || d.raw === null) continue;
+
+      const card    = document.getElementById(`card-${key}`);
+      const valEl   = document.getElementById(`val-${key}`);
+      const pipEl   = document.getElementById(`pip-${key}`);
+      const trendEl = document.getElementById(`trend-${key}`);
+      const dateEl  = document.getElementById(`date-${key}`);
+
+      if (!card || !valEl) continue;
+
+      valEl.textContent = d.value;
+
+      const status = cfg.status(d.raw);
+      card.className = `card ${status}`;
+      if (pipEl) pipEl.className = `card-pip pip-${status}`;
+
+      if (trendEl) {
+        const { dir, cls, text } = cfg.trend(d.raw);
+        trendEl.innerHTML = `<span class="arrow ${cls}">${dir}</span> ${text}`;
+      }
+
+      if (dateEl) {
+        dateEl.textContent = ts.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      }
+    }
+
+    renderThesis();
+  }
+
+  // ── Thesis health ─────────────────────────────────────────────────
+  function renderThesis() {
+    const statuses = Object.keys(METRIC_CFG).map(key => {
+      const card = document.getElementById(`card-${key}`);
+      if (!card) return 'amber';
+      if (card.classList.contains('green')) return 'green';
+      if (card.classList.contains('red'))   return 'red';
+      return 'amber';
+    });
+
+    const score = statuses.reduce((n, s) => n + (s === 'green' ? 2 : s === 'amber' ? 1 : 0), 0);
+    const pct   = score / (statuses.length * 2);
+
+    document.getElementById('thesisDots').innerHTML = statuses.map(s => {
+      const c = s === 'green' ? 'var(--green)' : s === 'amber' ? 'var(--amber)' : 'var(--red)';
+      return `<div class="thesis-dot" style="background:${c}"></div>`;
+    }).join('');
+
+    const v = document.getElementById('verdictText');
+    if      (pct >= 0.75) { v.textContent = 'Bullish';                 v.style.color = 'var(--green)'; }
+    else if (pct >= 0.55) { v.textContent = 'Cautiously Bullish';      v.style.color = 'var(--amber)'; }
+    else if (pct >= 0.35) { v.textContent = 'Cautious';                v.style.color = '#F97316'; }
+    else                  { v.textContent = 'Bearish — Review Thesis'; v.style.color = 'var(--red)'; }
+  }
+
+  // ── Refresh ───────────────────────────────────────────────────────
+  async function handleRefresh() {
+    const token = localStorage.getItem('refreshToken') || '';
+    if (!token) {
+      showToast('Enter your refresh token in Settings first');
+      openSettings();
+      return;
+    }
+
+    const btn  = document.getElementById('refreshBtn');
+    const icon = document.getElementById('refreshIcon');
+    btn.disabled = true;
+    icon.innerHTML = '<span class="spin">↻</span>';
+
+    try {
+      // Validate token synchronously before firing background job
+      const check = await fetch('/.netlify/functions/validate-token', {
+        headers: { 'x-refresh-token': token },
+      });
+      if (check.status === 401) {
+        showToast('Invalid token — check Settings');
+        btn.disabled = false;
+        icon.textContent = '↻';
+        return;
+      }
+
+      // Fire background refresh (returns 202 immediately)
+      await fetch('/.netlify/functions/refresh-background', {
+        method: 'POST',
+        headers: { 'x-refresh-token': token },
+      });
+
+      showToast('Fetching all sources… ~30–60 seconds');
+
+      // Poll for updated snapshot
+      let attempts = 0;
+      const poll = async () => {
+        if (++attempts > 25) {
+          showToast('Still running — reload the page in a minute');
+          btn.disabled = false;
+          icon.textContent = '↻';
+          return;
+        }
+        try {
+          const { snapshot } = await fetch('/.netlify/functions/get-data').then(r => r.json());
+          if (snapshot && snapshot.lastUpdated !== currentSnapshotTs) {
+            applySnapshot(snapshot);
+            showToast('All sources refreshed');
+            btn.disabled = false;
+            icon.textContent = '↻';
+          } else {
+            setTimeout(poll, 4000);
+          }
+        } catch {
+          setTimeout(poll, 4000);
+        }
+      };
+      setTimeout(poll, 10000); // head start for background function
+
+    } catch {
+      showToast('Network error — try again');
+      btn.disabled = false;
+      icon.textContent = '↻';
+    }
+  }
+
+  // ── Settings ──────────────────────────────────────────────────────
+  function loadTokenFromStorage() {
+    const token = localStorage.getItem('refreshToken') || '';
+    const el = document.getElementById('input-token');
+    if (el) el.value = token;
+  }
+
+  function applySettings(settings) {
+    const map = {
+      election: 'url-election', approval: 'url-approval',
+      selic: 'url-selic', ipca: 'url-ipca', fx: 'url-fx',
+      ewz: 'url-ewz', ibov: 'url-ibov', debt: 'url-debt', unemp: 'url-unemp',
+    };
+    for (const [key, inputId] of Object.entries(map)) {
+      if (settings[key]) {
+        const el = document.getElementById(inputId);
+        if (el) el.value = settings[key];
+      }
+    }
+  }
+
+  function openSettings() {
+    document.getElementById('overlay').classList.add('open');
+    document.getElementById('panel').classList.add('open');
+  }
+
+  function closeSettings() {
+    document.getElementById('overlay').classList.remove('open');
+    document.getElementById('panel').classList.remove('open');
+  }
+
+  async function saveSettings() {
+    const token = (document.getElementById('input-token')?.value || '').trim();
+    localStorage.setItem('refreshToken', token);
+
+    const settings = {
+      election: document.getElementById('url-election')?.value,
+      approval: document.getElementById('url-approval')?.value,
+      selic:    document.getElementById('url-selic')?.value,
+      ipca:     document.getElementById('url-ipca')?.value,
+      fx:       document.getElementById('url-fx')?.value,
+      ewz:      document.getElementById('url-ewz')?.value,
+      ibov:     document.getElementById('url-ibov')?.value,
+      debt:     document.getElementById('url-debt')?.value,
+      unemp:    document.getElementById('url-unemp')?.value,
+    };
+
+    if (token) {
+      try {
+        await fetch('/.netlify/functions/save-settings', {
+          method: 'POST',
+          headers: { 'x-refresh-token': token, 'content-type': 'application/json' },
+          body: JSON.stringify(settings),
+        });
+      } catch (e) {
+        console.warn('Could not save to server:', e);
+      }
+    }
+
+    closeSettings();
+    showToast('Settings saved');
+  }
+
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+</script>
+</body>
+</html>
