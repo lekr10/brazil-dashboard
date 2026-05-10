@@ -145,14 +145,53 @@ exports.handler = async (event) => {
     }
   });
 
-  // Preserve previous snapshot for rollback
+  // Preserve previous snapshot, write current
+  const prevRaw = await store.get('snapshot').catch(() => null);
+  const prevSnapshot = prevRaw ? JSON.parse(prevRaw) : null;
   try {
-    const prev = await store.get('snapshot').catch(() => null);
-    if (prev) await store.set('snapshot-previous', prev).catch(() => null);
+    if (prevRaw) await store.set('snapshot-previous', prevRaw).catch(() => null);
     await store.set('snapshot', JSON.stringify(snapshot));
     console.log('Snapshot written to Blobs OK');
   } catch (err) {
     console.error('Blobs write failed:', err.message);
+    return { statusCode: 500 };
+  }
+
+  // Build history entry from changes vs previous snapshot
+  const WORSE_IF_HIGHER = { selic: true, ipca: true, fx: true, ewz: false, ibov: false, debt: true, unemp: true };
+  const LABELS = {
+    selic: 'SELIC Rate', ipca: 'IPCA Inflation YoY', fx: 'USD / BRL',
+    ewz: 'EWZ Shares Outstanding', ibov: 'IBOVESPA',
+    debt: 'Gross Public Debt / GDP', unemp: 'Unemployment Rate',
+  };
+
+  if (prevSnapshot?.data) {
+    const changes = [];
+    for (const key of Object.keys(snapshot.data)) {
+      const curr = snapshot.data[key];
+      const prev = prevSnapshot.data[key];
+      if (!curr?.value || !prev?.value || curr.value === prev.value) continue;
+      const diff = (curr.raw ?? 0) - (prev.raw ?? 0);
+      changes.push({
+        key,
+        label: LABELS[key],
+        prev: prev.value,
+        curr: curr.value,
+        worse: WORSE_IF_HIGHER[key] ? diff > 0 : diff < 0,
+      });
+    }
+
+    if (changes.length > 0) {
+      const history = (await store.get('history', { type: 'json' }).catch(() => null)) || [];
+      history.unshift({ ts: snapshot.lastUpdated, changes });
+      if (history.length > 90) history.length = 90;
+      await store.set('history', JSON.stringify(history)).catch(err =>
+        console.error('History write failed:', err.message)
+      );
+      console.log(`History updated: ${changes.length} change(s)`);
+    } else {
+      console.log('No changes — history unchanged');
+    }
   }
 
   return { statusCode: 200 };

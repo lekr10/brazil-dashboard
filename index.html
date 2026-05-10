@@ -49,7 +49,6 @@
       border-bottom: 1px solid rgba(255,255,255,0.06);
     }
 
-    /* Brazil flag stripe across top */
     .header::before {
       content: '';
       position: absolute;
@@ -64,10 +63,7 @@
       gap: 12px;
     }
 
-    .header-flag {
-      font-size: 20px;
-      line-height: 1;
-    }
+    .header-flag { font-size: 20px; line-height: 1; }
 
     .header-title {
       font-size: 14px;
@@ -133,17 +129,39 @@
       justify-content: center;
       transition: background 0.15s, color 0.15s;
     }
-    .btn-gear:hover {
-      background: rgba(255,255,255,0.1);
-      color: rgba(255,255,255,0.8);
-    }
+    .btn-gear:hover { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.8); }
 
-    /* ─── Page layout ─── */
+    /* ─── Page ─── */
     .page {
       max-width: 1180px;
       margin: 0 auto;
       padding: 28px 24px 64px;
     }
+
+    /* ─── Tabs ─── */
+    .tabs {
+      display: flex;
+      gap: 2px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .tab {
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      margin-bottom: -1px;
+      padding: 8px 18px;
+      font-family: inherit;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-3);
+      cursor: pointer;
+      letter-spacing: 0.01em;
+      transition: color 0.15s, border-color 0.15s;
+    }
+    .tab:hover { color: var(--text-2); }
+    .tab.active { color: var(--text-1); border-bottom-color: var(--text-1); }
 
     /* ─── Thesis bar ─── */
     .thesis {
@@ -176,17 +194,9 @@
       line-height: 1;
     }
 
-    .thesis-dots {
-      display: flex;
-      gap: 4px;
-      margin-top: 8px;
-    }
+    .thesis-dots { display: flex; gap: 4px; margin-top: 8px; }
 
-    .thesis-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-    }
+    .thesis-dot { width: 8px; height: 8px; border-radius: 50%; }
 
     .thesis-divider {
       width: 1px;
@@ -246,11 +256,7 @@
       white-space: nowrap;
     }
 
-    .election-body {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-    }
+    .election-body { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
 
     .col-label {
       font-size: 9px;
@@ -261,85 +267,20 @@
       margin-bottom: 14px;
     }
 
-    /* Poll bars */
-    .poll-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .poll-name {
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-1);
-      width: 160px;
-      flex-shrink: 0;
-    }
-    .poll-track {
-      flex: 1;
-      height: 8px;
-      background: var(--bg);
-      border-radius: 100px;
-      overflow: hidden;
-    }
-    .poll-fill {
-      height: 100%;
-      border-radius: 100px;
-    }
-    .poll-pct {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--text-1);
-      width: 32px;
-      text-align: right;
-      flex-shrink: 0;
-    }
+    .poll-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .poll-name { font-size: 12px; font-weight: 500; color: var(--text-1); width: 160px; flex-shrink: 0; }
+    .poll-track { flex: 1; height: 8px; background: var(--bg); border-radius: 100px; overflow: hidden; }
+    .poll-fill { height: 100%; border-radius: 100px; }
+    .poll-pct { font-size: 12px; font-weight: 700; color: var(--text-1); width: 32px; text-align: right; flex-shrink: 0; }
+    .poll-note { font-size: 11px; color: var(--text-3); margin-top: 14px; line-height: 1.5; }
 
-    .poll-note {
-      font-size: 11px;
-      color: var(--text-3);
-      margin-top: 14px;
-      line-height: 1.5;
-    }
-
-    /* Approval */
     .approval-divider { border-left: 1px solid var(--border); padding-left: 32px; }
-
-    .approval-row {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 10px;
-    }
-    .approval-label {
-      font-size: 11px;
-      color: var(--text-2);
-      width: 64px;
-      flex-shrink: 0;
-    }
-    .approval-track {
-      flex: 1;
-      height: 6px;
-      background: var(--bg);
-      border-radius: 100px;
-      overflow: hidden;
-    }
+    .approval-row { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+    .approval-label { font-size: 11px; color: var(--text-2); width: 64px; flex-shrink: 0; }
+    .approval-track { flex: 1; height: 6px; background: var(--bg); border-radius: 100px; overflow: hidden; }
     .approval-fill { height: 100%; border-radius: 100px; }
-    .approval-pct {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-2);
-      width: 28px;
-      text-align: right;
-      flex-shrink: 0;
-    }
-
-    .approval-sources {
-      font-size: 10px;
-      color: var(--text-3);
-      margin-top: 14px;
-      line-height: 1.6;
-    }
+    .approval-pct { font-size: 11px; font-weight: 600; color: var(--text-2); width: 28px; text-align: right; flex-shrink: 0; }
+    .approval-sources { font-size: 10px; color: var(--text-3); margin-top: 14px; line-height: 1.6; }
 
     .election-footer {
       display: flex;
@@ -350,29 +291,12 @@
       border-top: 1px solid var(--border);
     }
 
-    .status-line {
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      font-size: 12px;
-      font-weight: 500;
-      color: var(--text-2);
-    }
-
-    .status-pip {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
-    .pip-green  { background: var(--green); }
-    .pip-amber  { background: var(--amber); }
-    .pip-red    { background: var(--red);   }
-
-    .footer-source {
-      font-size: 10px;
-      color: var(--text-3);
-    }
+    .status-line { display: flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; color: var(--text-2); }
+    .status-pip { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+    .pip-green { background: var(--green); }
+    .pip-amber { background: var(--amber); }
+    .pip-red   { background: var(--red); }
+    .footer-source { font-size: 10px; color: var(--text-3); }
 
     /* ─── Section label ─── */
     .section {
@@ -386,19 +310,8 @@
     }
 
     /* ─── Metric grid ─── */
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .grid-3 {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin-bottom: 20px;
-    }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 12px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
 
     @media (max-width: 1000px) {
       .grid-4 { grid-template-columns: repeat(2, 1fr); }
@@ -423,28 +336,19 @@
       position: relative;
       overflow: hidden;
     }
-    .card:hover {
-      box-shadow: 0 4px 16px rgba(0,0,0,0.09);
-      transform: translateY(-1px);
-    }
+    .card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.09); transform: translateY(-1px); }
 
-    /* Top status stripe */
     .card::before {
       content: '';
       position: absolute;
       top: 0; left: 0; right: 0;
       height: 3px;
     }
-    .card.green::before  { background: var(--green); }
-    .card.amber::before  { background: var(--amber); }
-    .card.red::before    { background: var(--red);   }
+    .card.green::before { background: var(--green); }
+    .card.amber::before { background: var(--amber); }
+    .card.red::before   { background: var(--red); }
 
-    .card-top {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
+    .card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
 
     .card-label {
       font-size: 11px;
@@ -457,20 +361,9 @@
       gap: 5px;
     }
 
-    .card-pip {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      flex-shrink: 0;
-    }
+    .card-pip { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
 
-    .card-link {
-      color: var(--text-3);
-      text-decoration: none;
-      font-size: 14px;
-      line-height: 1;
-      transition: color 0.12s;
-    }
+    .card-link { color: var(--text-3); text-decoration: none; font-size: 14px; line-height: 1; transition: color 0.12s; }
     .card-link:hover { color: var(--text-2); }
 
     .card-value {
@@ -492,16 +385,12 @@
       flex: 1;
     }
 
-    .arrow {
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1;
-    }
-    .arr-good-up    { color: var(--green); }
-    .arr-good-down  { color: var(--green); }
-    .arr-bad-up     { color: var(--red);   }
-    .arr-bad-down   { color: var(--red);   }
-    .arr-neutral    { color: var(--text-3); }
+    .arrow { font-size: 12px; font-weight: 700; line-height: 1; }
+    .arr-good-up   { color: var(--green); }
+    .arr-good-down { color: var(--green); }
+    .arr-bad-up    { color: var(--red); }
+    .arr-bad-down  { color: var(--red); }
+    .arr-neutral   { color: var(--text-3); }
 
     .card-footer {
       display: flex;
@@ -512,16 +401,67 @@
       border-top: 1px solid var(--border);
     }
 
-    .card-source {
-      font-size: 9px;
-      color: var(--text-3);
-      font-weight: 500;
+    .card-source { font-size: 9px; color: var(--text-3); font-weight: 500; }
+    .card-date   { font-size: 9px; color: var(--text-3); }
+
+    /* ─── History view ─── */
+    .history-empty {
+      text-align: center;
+      padding: 80px 24px;
+    }
+    .history-empty-icon { font-size: 28px; margin-bottom: 14px; opacity: 0.4; }
+    .history-empty-title { font-size: 14px; font-weight: 700; color: var(--text-2); margin-bottom: 6px; }
+    .history-empty-sub { font-size: 12px; color: var(--text-3); line-height: 1.6; }
+
+    .history-entry {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      margin-bottom: 12px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
     }
 
-    .card-date {
-      font-size: 9px;
-      color: var(--text-3);
+    .history-entry-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 11px 20px;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
     }
+
+    .history-date { font-size: 12px; font-weight: 700; color: var(--text-1); letter-spacing: -0.01em; }
+    .history-time { font-size: 11px; color: var(--text-3); }
+
+    .history-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      padding: 11px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+    .history-row:last-child { border-bottom: none; }
+
+    .history-metric { font-size: 12px; font-weight: 500; color: var(--text-2); width: 200px; flex-shrink: 0; }
+
+    .history-values { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .history-prev { font-size: 13px; font-weight: 500; color: var(--text-3); font-variant-numeric: tabular-nums; }
+    .history-sep  { font-size: 12px; color: var(--text-3); }
+    .history-curr { font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+    .history-signal {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      flex-shrink: 0;
+      width: 120px;
+      text-align: right;
+    }
+
+    .change-better { color: var(--green); }
+    .change-worse  { color: var(--red); }
 
     /* ─── Settings panel ─── */
     .overlay {
@@ -557,36 +497,13 @@
       flex-shrink: 0;
     }
 
-    .panel-title {
-      font-size: 14px;
-      font-weight: 700;
-      letter-spacing: -0.01em;
-      margin-bottom: 3px;
-    }
+    .panel-title { font-size: 14px; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 3px; }
+    .panel-sub { font-size: 11px; color: var(--text-2); line-height: 1.5; }
 
-    .panel-sub {
-      font-size: 11px;
-      color: var(--text-2);
-      line-height: 1.5;
-    }
-
-    .btn-close {
-      background: none;
-      border: none;
-      color: var(--text-3);
-      font-size: 18px;
-      cursor: pointer;
-      padding: 2px;
-      line-height: 1;
-      margin-top: -2px;
-    }
+    .btn-close { background: none; border: none; color: var(--text-3); font-size: 18px; cursor: pointer; padding: 2px; line-height: 1; margin-top: -2px; }
     .btn-close:hover { color: var(--text-1); }
 
-    .panel-body {
-      flex: 1;
-      overflow-y: auto;
-      padding: 0 24px;
-    }
+    .panel-body { flex: 1; overflow-y: auto; padding: 0 24px; }
 
     .panel-section-label {
       font-size: 9px;
@@ -596,26 +513,12 @@
       color: var(--text-3);
       padding: 16px 0 8px;
       border-bottom: 1px solid var(--border);
-      margin-bottom: 0;
     }
 
-    .panel-row {
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-    }
+    .panel-row { padding: 16px 0; border-bottom: 1px solid var(--border); }
     .panel-row:last-child { border-bottom: none; }
-
-    .panel-row-name {
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-1);
-      margin-bottom: 2px;
-    }
-    .panel-row-hint {
-      font-size: 10px;
-      color: var(--text-3);
-      margin-bottom: 8px;
-    }
+    .panel-row-name { font-size: 12px; font-weight: 600; color: var(--text-1); margin-bottom: 2px; }
+    .panel-row-hint { font-size: 10px; color: var(--text-3); margin-bottom: 8px; }
 
     .url-input {
       width: 100%;
@@ -628,17 +531,9 @@
       background: var(--bg);
       transition: border-color 0.15s, background 0.15s;
     }
-    .url-input:focus {
-      outline: none;
-      border-color: #0F1117;
-      background: #fff;
-    }
+    .url-input:focus { outline: none; border-color: #0F1117; background: #fff; }
 
-    .panel-foot {
-      padding: 16px 24px;
-      border-top: 1px solid var(--border);
-      flex-shrink: 0;
-    }
+    .panel-foot { padding: 16px 24px; border-top: 1px solid var(--border); flex-shrink: 0; }
 
     .btn-save {
       width: 100%;
@@ -674,19 +569,14 @@
       z-index: 200;
       white-space: nowrap;
     }
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
-    /* ─── Spinner ─── */
     @keyframes spin { to { transform: rotate(360deg); } }
     .spin { display: inline-block; animation: spin 0.7s linear infinite; }
   </style>
 </head>
 <body>
 
-<!-- ── Header ── -->
 <header class="header">
   <div class="header-left">
     <span class="header-flag">🇧🇷</span>
@@ -703,254 +593,228 @@
   </div>
 </header>
 
-<!-- ── Page ── -->
 <div class="page">
 
-  <!-- Thesis health -->
-  <div class="thesis">
-    <div class="thesis-score-block">
-      <div class="thesis-eyebrow">Thesis Health</div>
-      <div class="thesis-verdict" id="verdictText">—</div>
-      <div class="thesis-dots" id="thesisDots"></div>
-    </div>
-    <div class="thesis-divider"></div>
-    <div class="thesis-detail">
-      Rate cut cycle intact and inflation cooperating. BRL strengthening through 5.0 and EWZ inflows at 2019 highs signal foreign conviction building. Gross debt trajectory and the 2026 election are the primary overhangs — the election outcome is the single variable that determines Spring vs. Fall scenario.
-    </div>
+  <!-- Tab nav -->
+  <div class="tabs">
+    <button class="tab active" data-tab="dashboard" onclick="showTab('dashboard')">Dashboard</button>
+    <button class="tab" data-tab="history" onclick="showTab('history')">History</button>
   </div>
 
-  <!-- Election card -->
-  <div class="election-card">
-    <div class="election-top">
-      <div>
-        <div class="election-eyebrow">Political Landscape · 2026 Presidential Election</div>
-        <div class="election-title">Election Polling &amp; Presidential Approval</div>
+  <!-- ── Dashboard view ── -->
+  <div id="view-dashboard">
+
+    <div class="thesis">
+      <div class="thesis-score-block">
+        <div class="thesis-eyebrow">Thesis Health</div>
+        <div class="thesis-verdict" id="verdictText">—</div>
+        <div class="thesis-dots" id="thesisDots"></div>
       </div>
-      <span class="gating-tag">⚠ Thesis Gating Variable</span>
+      <div class="thesis-divider"></div>
+      <div class="thesis-detail">
+        Rate cut cycle intact and inflation cooperating. BRL strengthening through 5.0 and EWZ inflows at 2019 highs signal foreign conviction building. Gross debt trajectory and the 2026 election are the primary overhangs — the election outcome is the single variable that determines Spring vs. Fall scenario.
+      </div>
     </div>
 
-    <div class="election-body">
-      <!-- Poll bars -->
-      <div>
-        <div class="col-label">Presidential race · first round</div>
+    <div class="election-card">
+      <div class="election-top">
+        <div>
+          <div class="election-eyebrow">Political Landscape · 2026 Presidential Election</div>
+          <div class="election-title">Election Polling &amp; Presidential Approval</div>
+        </div>
+        <span class="gating-tag">⚠ Thesis Gating Variable</span>
+      </div>
 
-        <div class="poll-row">
-          <div class="poll-name">Flávio Bolsonaro (R)</div>
-          <div class="poll-track">
-            <div class="poll-fill" style="width:42%; background:#2563EB;"></div>
+      <div class="election-body">
+        <div>
+          <div class="col-label">Presidential race · first round</div>
+          <div class="poll-row">
+            <div class="poll-name">Flávio Bolsonaro (R)</div>
+            <div class="poll-track"><div class="poll-fill" style="width:42%; background:#2563EB;"></div></div>
+            <div class="poll-pct">42%</div>
           </div>
-          <div class="poll-pct">42%</div>
-        </div>
-
-        <div class="poll-row">
-          <div class="poll-name">Lula (L, incumbent)</div>
-          <div class="poll-track">
-            <div class="poll-fill" style="width:38%; background:#DC2626;"></div>
+          <div class="poll-row">
+            <div class="poll-name">Lula (L, incumbent)</div>
+            <div class="poll-track"><div class="poll-fill" style="width:38%; background:#DC2626;"></div></div>
+            <div class="poll-pct">38%</div>
           </div>
-          <div class="poll-pct">38%</div>
-        </div>
-
-        <div class="poll-row">
-          <div class="poll-name">Other / Undecided</div>
-          <div class="poll-track">
-            <div class="poll-fill" style="width:20%; background:#D1D5DB;"></div>
+          <div class="poll-row">
+            <div class="poll-name">Other / Undecided</div>
+            <div class="poll-track"><div class="poll-fill" style="width:20%; background:#D1D5DB;"></div></div>
+            <div class="poll-pct">20%</div>
           </div>
-          <div class="poll-pct">20%</div>
+          <p class="poll-note">
+            Bolsonaro win → fiscal discipline → deeper cuts → bull case unlocked<br>
+            Lula win → loose fiscal stance → crowding-out persists → slower recovery
+          </p>
         </div>
 
-        <p class="poll-note">
-          Bolsonaro win → fiscal discipline → deeper cuts → bull case unlocked<br>
-          Lula win → loose fiscal stance → crowding-out persists → slower recovery
-        </p>
-      </div>
-
-      <!-- Lula approval -->
-      <div class="approval-divider">
-        <div class="col-label">Lula approval — Datafolha</div>
-
-        <div class="approval-row">
-          <div class="approval-label">Bad / Poor</div>
-          <div class="approval-track">
-            <div class="approval-fill" style="width:40%; background:var(--red);"></div>
+        <div class="approval-divider">
+          <div class="col-label">Lula approval — Datafolha</div>
+          <div class="approval-row">
+            <div class="approval-label">Bad / Poor</div>
+            <div class="approval-track"><div class="approval-fill" style="width:40%; background:var(--red);"></div></div>
+            <div class="approval-pct">40%</div>
           </div>
-          <div class="approval-pct">40%</div>
-        </div>
-
-        <div class="approval-row">
-          <div class="approval-label">Average</div>
-          <div class="approval-track">
-            <div class="approval-fill" style="width:29%; background:#D1D5DB;"></div>
+          <div class="approval-row">
+            <div class="approval-label">Average</div>
+            <div class="approval-track"><div class="approval-fill" style="width:29%; background:#D1D5DB;"></div></div>
+            <div class="approval-pct">29%</div>
           </div>
-          <div class="approval-pct">29%</div>
-        </div>
-
-        <div class="approval-row">
-          <div class="approval-label">Good</div>
-          <div class="approval-track">
-            <div class="approval-fill" style="width:29%; background:var(--green);"></div>
+          <div class="approval-row">
+            <div class="approval-label">Good</div>
+            <div class="approval-track"><div class="approval-fill" style="width:29%; background:var(--green);"></div></div>
+            <div class="approval-pct">29%</div>
           </div>
-          <div class="approval-pct">29%</div>
+          <div class="approval-sources">
+            Quaest: 52% disapprove · 43% approve<br>
+            Declining approval reduces Lula's re-election odds — market-positive signal.
+          </div>
         </div>
+      </div>
 
-        <div class="approval-sources">
-          Quaest: 52% disapprove · 43% approve<br>
-          Declining approval reduces Lula's re-election odds — market-positive signal.
+      <div class="election-footer">
+        <div class="status-line">
+          <span class="status-pip pip-amber"></span>
+          Race tightening — outcome uncertain heading into H2 2026
         </div>
+        <span class="footer-source">Datafolha · Quaest · May 2, 2026</span>
       </div>
     </div>
 
-    <div class="election-footer">
-      <div class="status-line">
-        <span class="status-pip pip-amber"></span>
-        Race tightening — outcome uncertain heading into H2 2026
-      </div>
-      <span class="footer-source">Datafolha · Quaest · May 2, 2026</span>
-    </div>
-  </div>
+    <div class="section">Monetary Policy &amp; Currency</div>
+    <div class="grid-4">
 
-  <!-- Row 1: monetary + fx/flows -->
-  <div class="section">Monetary Policy &amp; Currency</div>
-  <div class="grid-4">
-
-    <!-- SELIC -->
-    <div class="card amber" id="card-selic">
-      <div class="card-top">
-        <div class="card-label">
-          <span class="card-pip pip-amber" id="pip-selic"></span>
-          SELIC Rate
+      <div class="card amber" id="card-selic">
+        <div class="card-top">
+          <div class="card-label">
+            <span class="card-pip pip-amber" id="pip-selic"></span>SELIC Rate
+          </div>
+          <a class="card-link" href="https://tradingeconomics.com/brazil/interest-rate" target="_blank">↗</a>
         </div>
-        <a class="card-link" href="https://tradingeconomics.com/brazil/interest-rate" target="_blank" title="View source">↗</a>
-      </div>
-      <div class="card-value" id="val-selic">14.50%</div>
-      <div class="card-trend" id="trend-selic">
-        <span class="arrow arr-good-down">↓</span> Cutting · down from 15.0% peak
-      </div>
-      <div class="card-footer">
-        <span class="card-source">Banco Central do Brasil</span>
-        <span class="card-date" id="date-selic">May 7, 2026</span>
-      </div>
-    </div>
-
-    <!-- IPCA -->
-    <div class="card green" id="card-ipca">
-      <div class="card-top">
-        <div class="card-label">
-          <span class="card-pip pip-green" id="pip-ipca"></span>
-          IPCA Inflation YoY
+        <div class="card-value" id="val-selic">14.50%</div>
+        <div class="card-trend" id="trend-selic">
+          <span class="arrow arr-good-down">↓</span> Cutting · down from 15.0% peak
         </div>
-        <a class="card-link" href="https://tradingeconomics.com/brazil/inflation-cpi" target="_blank" title="View source">↗</a>
-      </div>
-      <div class="card-value" id="val-ipca">4.14%</div>
-      <div class="card-trend" id="trend-ipca">
-        <span class="arrow arr-good-down">↓</span> Trending toward 3% target
-      </div>
-      <div class="card-footer">
-        <span class="card-source">IBGE</span>
-        <span class="card-date" id="date-ipca">Apr 25, 2026</span>
-      </div>
-    </div>
-
-    <!-- USD/BRL -->
-    <div class="card green" id="card-fx">
-      <div class="card-top">
-        <div class="card-label">
-          <span class="card-pip pip-green" id="pip-fx"></span>
-          USD / BRL
+        <div class="card-footer">
+          <span class="card-source">Banco Central do Brasil</span>
+          <span class="card-date" id="date-selic">—</span>
         </div>
-        <a class="card-link" href="https://tradingeconomics.com/usdbrl:cur" target="_blank" title="View source">↗</a>
       </div>
-      <div class="card-value" id="val-fx">4.95</div>
-      <div class="card-trend" id="trend-fx">
-        <span class="arrow arr-good-down">↓</span> BRL strengthening · sub-5.0
-      </div>
-      <div class="card-footer">
-        <span class="card-source">TradingView</span>
-        <span class="card-date" id="date-fx">May 9, 2026</span>
-      </div>
-    </div>
 
-    <!-- EWZ -->
-    <div class="card green" id="card-ewz">
-      <div class="card-top">
-        <div class="card-label">
-          <span class="card-pip pip-green" id="pip-ewz"></span>
-          EWZ Shares Outstanding
+      <div class="card green" id="card-ipca">
+        <div class="card-top">
+          <div class="card-label">
+            <span class="card-pip pip-green" id="pip-ipca"></span>IPCA Inflation YoY
+          </div>
+          <a class="card-link" href="https://tradingeconomics.com/brazil/inflation-cpi" target="_blank">↗</a>
         </div>
-        <a class="card-link" href="https://www.ishares.com/us/products/239612/" target="_blank" title="View source">↗</a>
-      </div>
-      <div class="card-value" id="val-ewz">291M</div>
-      <div class="card-trend" id="trend-ewz">
-        <span class="arrow arr-good-up">↑</span> +93M since Jan · 2019 highs
-      </div>
-      <div class="card-footer">
-        <span class="card-source">iShares</span>
-        <span class="card-date" id="date-ewz">Apr 30, 2026</span>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- Row 2: markets + fiscal + macro -->
-  <div class="section">Markets, Fiscal &amp; Economy</div>
-  <div class="grid-3">
-
-    <!-- IBOVESPA -->
-    <div class="card green" id="card-ibov">
-      <div class="card-top">
-        <div class="card-label">
-          <span class="card-pip pip-green" id="pip-ibov"></span>
-          IBOVESPA
+        <div class="card-value" id="val-ipca">4.14%</div>
+        <div class="card-trend" id="trend-ipca">
+          <span class="arrow arr-good-down">↓</span> Trending toward 3% target
         </div>
-        <a class="card-link" href="https://tradingeconomics.com/brazil/stock-market" target="_blank" title="View source">↗</a>
-      </div>
-      <div class="card-value" id="val-ibov">184,090</div>
-      <div class="card-trend" id="trend-ibov">
-        <span class="arrow arr-good-up">↑</span> Trending higher · new highs
-      </div>
-      <div class="card-footer">
-        <span class="card-source">B3 / TradingView</span>
-        <span class="card-date" id="date-ibov">May 9, 2026</span>
-      </div>
-    </div>
-
-    <!-- Gross Debt -->
-    <div class="card red" id="card-debt">
-      <div class="card-top">
-        <div class="card-label">
-          <span class="card-pip pip-red" id="pip-debt"></span>
-          Gross Public Debt / GDP
+        <div class="card-footer">
+          <span class="card-source">IBGE</span>
+          <span class="card-date" id="date-ipca">—</span>
         </div>
-        <a class="card-link" href="https://tradingeconomics.com/brazil/government-debt-to-gdp" target="_blank" title="View source">↗</a>
       </div>
-      <div class="card-value" id="val-debt">79%</div>
-      <div class="card-trend" id="trend-debt">
-        <span class="arrow arr-bad-up">↑</span> Rising · up from 56% a decade ago
-      </div>
-      <div class="card-footer">
-        <span class="card-source">Banco Central do Brasil</span>
-        <span class="card-date" id="date-debt">Apr 30, 2026</span>
-      </div>
-    </div>
 
-    <!-- Unemployment -->
-    <div class="card green" id="card-unemp">
-      <div class="card-top">
-        <div class="card-label">
-          <span class="card-pip pip-green" id="pip-unemp"></span>
-          Unemployment Rate
+      <div class="card green" id="card-fx">
+        <div class="card-top">
+          <div class="card-label">
+            <span class="card-pip pip-green" id="pip-fx"></span>USD / BRL
+          </div>
+          <a class="card-link" href="https://tradingeconomics.com/usdbrl:cur" target="_blank">↗</a>
         </div>
-        <a class="card-link" href="https://tradingeconomics.com/brazil/unemployment-rate" target="_blank" title="View source">↗</a>
+        <div class="card-value" id="val-fx">4.91</div>
+        <div class="card-trend" id="trend-fx">
+          <span class="arrow arr-good-down">↓</span> BRL strengthening · sub-5.0
+        </div>
+        <div class="card-footer">
+          <span class="card-source">TradingView</span>
+          <span class="card-date" id="date-fx">—</span>
+        </div>
       </div>
-      <div class="card-value" id="val-unemp">5.6%</div>
-      <div class="card-trend" id="trend-unemp">
-        <span class="arrow arr-neutral">→</span> Stable at multi-year lows
+
+      <div class="card green" id="card-ewz">
+        <div class="card-top">
+          <div class="card-label">
+            <span class="card-pip pip-green" id="pip-ewz"></span>EWZ Shares Outstanding
+          </div>
+          <a class="card-link" href="https://www.ishares.com/us/products/239612/" target="_blank">↗</a>
+        </div>
+        <div class="card-value" id="val-ewz">292M</div>
+        <div class="card-trend" id="trend-ewz">
+          <span class="arrow arr-good-up">↑</span> Inflows building · 2019 highs
+        </div>
+        <div class="card-footer">
+          <span class="card-source">iShares</span>
+          <span class="card-date" id="date-ewz">—</span>
+        </div>
       </div>
-      <div class="card-footer">
-        <span class="card-source">IBGE – PNAD Contínua</span>
-        <span class="card-date" id="date-unemp">Apr 25, 2026</span>
-      </div>
+
     </div>
 
+    <div class="section">Markets, Fiscal &amp; Economy</div>
+    <div class="grid-3">
+
+      <div class="card green" id="card-ibov">
+        <div class="card-top">
+          <div class="card-label">
+            <span class="card-pip pip-green" id="pip-ibov"></span>IBOVESPA
+          </div>
+          <a class="card-link" href="https://tradingeconomics.com/brazil/stock-market" target="_blank">↗</a>
+        </div>
+        <div class="card-value" id="val-ibov">184,108</div>
+        <div class="card-trend" id="trend-ibov">
+          <span class="arrow arr-good-up">↑</span> Trending higher · new highs
+        </div>
+        <div class="card-footer">
+          <span class="card-source">B3 / TradingView</span>
+          <span class="card-date" id="date-ibov">—</span>
+        </div>
+      </div>
+
+      <div class="card red" id="card-debt">
+        <div class="card-top">
+          <div class="card-label">
+            <span class="card-pip pip-red" id="pip-debt"></span>Gross Public Debt / GDP
+          </div>
+          <a class="card-link" href="https://tradingeconomics.com/brazil/government-debt-to-gdp" target="_blank">↗</a>
+        </div>
+        <div class="card-value" id="val-debt">78.6%</div>
+        <div class="card-trend" id="trend-debt">
+          <span class="arrow arr-bad-up">↑</span> Rising · up from 56% a decade ago
+        </div>
+        <div class="card-footer">
+          <span class="card-source">Banco Central do Brasil</span>
+          <span class="card-date" id="date-debt">—</span>
+        </div>
+      </div>
+
+      <div class="card green" id="card-unemp">
+        <div class="card-top">
+          <div class="card-label">
+            <span class="card-pip pip-green" id="pip-unemp"></span>Unemployment Rate
+          </div>
+          <a class="card-link" href="https://tradingeconomics.com/brazil/unemployment-rate" target="_blank">↗</a>
+        </div>
+        <div class="card-value" id="val-unemp">6.1%</div>
+        <div class="card-trend" id="trend-unemp">
+          <span class="arrow arr-neutral">→</span> Stable at multi-year lows
+        </div>
+        <div class="card-footer">
+          <span class="card-source">IBGE – PNAD Contínua</span>
+          <span class="card-date" id="date-unemp">—</span>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /view-dashboard -->
+
+  <!-- ── History view ── -->
+  <div id="view-history" style="display:none">
+    <div id="history-feed"></div>
   </div>
 
 </div><!-- /page -->
@@ -958,20 +822,17 @@
 <!-- Settings overlay -->
 <div class="overlay" id="overlay" onclick="closeSettings()"></div>
 
-<!-- Settings panel -->
 <div class="panel" id="panel">
   <div class="panel-head">
     <div>
       <div class="panel-title">Data Sources</div>
-      <div class="panel-sub">Set a URL per metric. Refresh reads each page and extracts the current value — swap any URL for a better source and it just works.</div>
+      <div class="panel-sub">Set a URL per metric. Refresh reads each page and extracts the current value.</div>
     </div>
     <button class="btn-close" onclick="closeSettings()">✕</button>
   </div>
 
   <div class="panel-body">
-
     <div class="panel-section-label">Authentication</div>
-
     <div class="panel-row">
       <div class="panel-row-name">Refresh Token</div>
       <div class="panel-row-hint">Set REFRESH_TOKEN in Netlify → Site settings → Environment variables</div>
@@ -979,15 +840,14 @@
     </div>
 
     <div class="panel-section-label">Source URLs</div>
-
     <div class="panel-row">
       <div class="panel-row-name">Election Polling</div>
-      <div class="panel-row-hint">Datafolha or Quaest latest results — updated manually</div>
+      <div class="panel-row-hint">Datafolha or Quaest — updated manually</div>
       <input class="url-input" type="url" id="url-election" value="https://datafolha.folha.uol.com.br/opiniao-publica/pesquisas-eleitorais">
     </div>
     <div class="panel-row">
       <div class="panel-row-name">Lula Approval Rating</div>
-      <div class="panel-row-hint">Datafolha government approval tracking — updated manually</div>
+      <div class="panel-row-hint">Datafolha government approval — updated manually</div>
       <input class="url-input" type="url" id="url-approval" value="https://datafolha.folha.uol.com.br/opiniao-publica/governo-lula">
     </div>
     <div class="panel-row">
@@ -1032,11 +892,9 @@
   </div>
 </div>
 
-<!-- Toast -->
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── Threshold & trend config per metric ──────────────────────────
   const METRIC_CFG = {
     selic: {
       status: (r) => r <= 11 ? 'green' : r <= 14.25 ? 'amber' : 'red',
@@ -1058,7 +916,7 @@
     },
     ewz: {
       status: (r) => r >= 280 ? 'green' : r >= 200 ? 'amber' : 'red',
-      trend:  () => ({ dir: '↑', cls: 'arr-good-up', text: '+93M since Jan · 2019 highs' }),
+      trend:  () => ({ dir: '↑', cls: 'arr-good-up', text: 'Inflows building · 2019 highs' }),
     },
     ibov: {
       status: (r) => r >= 160000 ? 'green' : r >= 100000 ? 'amber' : 'red',
@@ -1076,28 +934,26 @@
 
   let currentSnapshotTs = null;
 
-  // ── Boot ─────────────────────────────────────────────────────────
   (async function init() {
     renderThesis();
+    renderHistory([]);
     loadTokenFromStorage();
     await loadData();
   })();
 
-  // ── Load data from Netlify ────────────────────────────────────────
   async function loadData() {
     try {
       const resp = await fetch('/.netlify/functions/get-data');
       if (!resp.ok) return;
-      const { snapshot, settings } = await resp.json();
+      const { snapshot, settings, history } = await resp.json();
       if (settings && Object.keys(settings).length) applySettings(settings);
       if (snapshot) applySnapshot(snapshot);
+      renderHistory(history || []);
     } catch (e) {
-      // Running locally without Netlify — placeholder values remain
       console.info('Backend not available:', e.message);
     }
   }
 
-  // ── Apply snapshot to UI ──────────────────────────────────────────
   function applySnapshot(snapshot) {
     currentSnapshotTs = snapshot.lastUpdated;
 
@@ -1137,7 +993,6 @@
     renderThesis();
   }
 
-  // ── Thesis health ─────────────────────────────────────────────────
   function renderThesis() {
     const statuses = Object.keys(METRIC_CFG).map(key => {
       const card = document.getElementById(`card-${key}`);
@@ -1162,7 +1017,56 @@
     else                  { v.textContent = 'Bearish — Review Thesis'; v.style.color = 'var(--red)'; }
   }
 
-  // ── Refresh ───────────────────────────────────────────────────────
+  function renderHistory(history) {
+    const feed = document.getElementById('history-feed');
+
+    if (!history || history.length === 0) {
+      feed.innerHTML = `
+        <div class="history-empty">
+          <div class="history-empty-icon">📋</div>
+          <div class="history-empty-title">No changes recorded yet</div>
+          <div class="history-empty-sub">Each time a Refresh detects a metric has moved,<br>an entry will appear here.</div>
+        </div>`;
+      return;
+    }
+
+    feed.innerHTML = history.map(entry => {
+      const ts      = new Date(entry.ts);
+      const dateStr = ts.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+      const timeStr = ts.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+
+      const rows = entry.changes.map(c => {
+        const cls    = c.worse ? 'change-worse' : 'change-better';
+        const signal = c.worse ? `↑ thesis ↓` : `↓ thesis ↑`;
+        return `
+          <div class="history-row">
+            <div class="history-metric">${c.label}</div>
+            <div class="history-values">
+              <span class="history-prev">${c.prev}</span>
+              <span class="history-sep">→</span>
+              <span class="history-curr ${cls}">${c.curr}</span>
+            </div>
+            <div class="history-signal ${cls}">${signal}</div>
+          </div>`;
+      }).join('');
+
+      return `
+        <div class="history-entry">
+          <div class="history-entry-header">
+            <span class="history-date">${dateStr}</span>
+            <span class="history-time">${timeStr}</span>
+          </div>
+          ${rows}
+        </div>`;
+    }).join('');
+  }
+
+  function showTab(tab) {
+    document.getElementById('view-dashboard').style.display = tab === 'dashboard' ? '' : 'none';
+    document.getElementById('view-history').style.display   = tab === 'history'   ? '' : 'none';
+    document.querySelectorAll('.tab').forEach(el => el.classList.toggle('active', el.dataset.tab === tab));
+  }
+
   async function handleRefresh() {
     const token = localStorage.getItem('refreshToken') || '';
     if (!token) {
@@ -1177,7 +1081,6 @@
     icon.innerHTML = '<span class="spin">↻</span>';
 
     try {
-      // Validate token synchronously before firing background job
       const check = await fetch('/.netlify/functions/validate-token', {
         headers: { 'x-refresh-token': token },
       });
@@ -1188,7 +1091,6 @@
         return;
       }
 
-      // Fire background refresh (returns 202 immediately)
       await fetch('/.netlify/functions/refresh-background', {
         method: 'POST',
         headers: { 'x-refresh-token': token },
@@ -1196,7 +1098,6 @@
 
       showToast('Fetching all sources… ~30–60 seconds');
 
-      // Poll for updated snapshot
       let attempts = 0;
       const poll = async () => {
         if (++attempts > 25) {
@@ -1206,9 +1107,10 @@
           return;
         }
         try {
-          const { snapshot } = await fetch('/.netlify/functions/get-data').then(r => r.json());
+          const { snapshot, history } = await fetch('/.netlify/functions/get-data').then(r => r.json());
           if (snapshot && snapshot.lastUpdated !== currentSnapshotTs) {
             applySnapshot(snapshot);
+            renderHistory(history || []);
             showToast('All sources refreshed');
             btn.disabled = false;
             icon.textContent = '↻';
@@ -1219,7 +1121,7 @@
           setTimeout(poll, 4000);
         }
       };
-      setTimeout(poll, 10000); // head start for background function
+      setTimeout(poll, 10000);
 
     } catch {
       showToast('Network error — try again');
@@ -1228,11 +1130,9 @@
     }
   }
 
-  // ── Settings ──────────────────────────────────────────────────────
   function loadTokenFromStorage() {
-    const token = localStorage.getItem('refreshToken') || '';
     const el = document.getElementById('input-token');
-    if (el) el.value = token;
+    if (el) el.value = localStorage.getItem('refreshToken') || '';
   }
 
   function applySettings(settings) {
@@ -1241,15 +1141,15 @@
       selic: 'url-selic', ipca: 'url-ipca', fx: 'url-fx',
       ewz: 'url-ewz', ibov: 'url-ibov', debt: 'url-debt', unemp: 'url-unemp',
     };
-    for (const [key, inputId] of Object.entries(map)) {
+    for (const [key, id] of Object.entries(map)) {
       if (settings[key]) {
-        const el = document.getElementById(inputId);
+        const el = document.getElementById(id);
         if (el) el.value = settings[key];
       }
     }
   }
 
-  function openSettings() {
+  function openSettings()  {
     document.getElementById('overlay').classList.add('open');
     document.getElementById('panel').classList.add('open');
   }
