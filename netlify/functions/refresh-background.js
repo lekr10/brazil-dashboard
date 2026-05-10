@@ -100,7 +100,11 @@ exports.handler = async (event) => {
 
   let store;
   try {
-    store = getStore('dashboard');
+    store = getStore({
+      name: 'dashboard',
+      siteID: process.env.NETLIFY_SITE_ID,
+      token: process.env.NETLIFY_TOKEN,
+    });
     console.log('Blobs store initialised');
   } catch (err) {
     console.error('Blobs init failed:', err.message);

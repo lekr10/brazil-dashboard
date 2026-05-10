@@ -7,7 +7,7 @@ exports.handler = async (event) => {
   }
   try {
     const settings = JSON.parse(event.body || '{}');
-    const store = getStore('dashboard');
+    const store = getStore({ name: 'dashboard', siteID: process.env.NETLIFY_SITE_ID, token: process.env.NETLIFY_TOKEN });
     await store.set('settings', JSON.stringify(settings));
     return { statusCode: 200, body: JSON.stringify({ ok: true }) };
   } catch {
