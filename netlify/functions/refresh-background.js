@@ -23,13 +23,6 @@ const METRICS = [
     format: (n) => n.toFixed(2),
   },
   {
-    key: 'ewz',
-    defaultUrl: 'https://www.ishares.com/us/products/239612/ishares-msci-brazil-etf',
-    prompt: 'This is an iShares ETF page for EWZ. Find the Shares Outstanding figure. It may appear as "291,800,000" or "291.8M". Convert to millions and return ONLY the number — for example if shares outstanding is 291,800,000 return "291.8". No units, no other text.',
-    validate: (n) => n > 50 && n < 5000,
-    format: (n) => `${n.toFixed(0)}M`,
-  },
-  {
     key: 'ibov',
     defaultUrl: 'https://tradingeconomics.com/brazil/stock-market',
     prompt: 'This page shows the Brazilian stock market index (IBOVESPA). Find the current index value. It will be a large number like 184090 or 182500. Return ONLY the number with no commas or other text.',
@@ -129,10 +122,19 @@ exports.handler = async (event) => {
     })
   );
 
+  // Preserve previous snapshot, write current
+  const prevRaw = await store.get('snapshot').catch(() => null);
+  const prevSnapshot = prevRaw ? JSON.parse(prevRaw) : null;
+
   const snapshot = {
     lastUpdated: new Date().toISOString(),
     data: {},
   };
+
+  // Carry forward any manually-saved metrics (e.g. ewz)
+  if (prevSnapshot?.data?.ewz?.manual) {
+    snapshot.data.ewz = prevSnapshot.data.ewz;
+  }
 
   results.forEach((result, i) => {
     const key = METRICS[i].key;
@@ -144,10 +146,6 @@ exports.handler = async (event) => {
       snapshot.data[key] = { key, value: null, raw: null, error: result.reason.message };
     }
   });
-
-  // Preserve previous snapshot, write current
-  const prevRaw = await store.get('snapshot').catch(() => null);
-  const prevSnapshot = prevRaw ? JSON.parse(prevRaw) : null;
   try {
     if (prevRaw) await store.set('snapshot-previous', prevRaw).catch(() => null);
     await store.set('snapshot', JSON.stringify(snapshot));
